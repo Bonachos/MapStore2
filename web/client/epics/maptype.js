@@ -8,8 +8,9 @@
 const {changeMapType} = require('../actions/maptype');
 const Rx = require('rxjs');
 const {get} = require('lodash');
-const defaultRegex = /\/(viewer)\/(\w+)\/(\w+)/;
-const findMapType = path => path.match(defaultRegex) && path.replace(defaultRegex, "$2");
+const defaultRegex = /\/(visualizador)\/(\w+)\/(\w+)/;
+const defaultRegex2 = /\/(gra)\/(\w+)\/(\w+)\/(\w+)/;
+const findMapType = path => path.match(defaultRegex) && path.replace(defaultRegex, "$3") || path.match(defaultRegex2) && path.replace(defaultRegex2, "$4");
 const { LOCATION_CHANGE } = require('connected-react-router');
 
 /**
@@ -25,7 +26,7 @@ const syncMapType = (action$, store) =>
             action.payload
             && action.payload
             && action.payload.location.pathname
-            && action.payload.location.pathname.match(defaultRegex)
+            && (action.payload.location.pathname.match(defaultRegex) || action.payload.location.pathname.match(defaultRegex2))
             && findMapType(action.payload.location.pathname) !== get(store.getState(), "maptype.mapType"))
         .switchMap((action) =>
             Rx.Observable.of(changeMapType(findMapType(action.payload.location.pathname)))

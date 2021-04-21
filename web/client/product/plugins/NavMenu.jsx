@@ -79,7 +79,6 @@ class NavMenu extends React.Component {
     };
 
     getLinks = (width) => {
-
         return this.props.items && [...this.props.items, ...(this.props.links || [])]
             .filter(item => item.href || item.linkId || item.tool || !item.hide)
             .map(item => item.tool && isFunction(item.tool) && item.tool(item.cfg) || item)
@@ -118,6 +117,15 @@ class NavMenu extends React.Component {
                 {({width}) => (
                     <Nav {...this.props.navProps}>
                         {this.getLinks(width)}
+                        <div className="container-fluid barra_boot_portal_azores_gov_pt texto_barra_portal">
+                            <div>
+                                <a target="_blank" href="https://www.azores.gov.pt">
+                                    <img src="https://www.azores.gov.pt/PortalAzoresgov/external/comum/barra/2018/logo.barra.azores.gov.pt.png" title="Azores.gov.pt - Portal do Governo dos Açores" alt="Azores.gov.pt - Portal do Governo dos Açores" width="150" height="34" border="0" />
+                                </a>
+                                <span v="span_barra_portal">Esta é uma presença online oficial do Governo dos Açores <a href="https://www.azores.gov.pt/Portal/pt/entidades/srapap/livres/Pagina+Barra+Topo+azores.gov.pt.htm" target="_blank" className="link_barra_portal">Saber mais<img src="https://www.azores.gov.pt/PortalAzoresgov/external/comum/barra/2018/arrow-out.png" width="8" height="8" alt=""/></a>
+                                </span>
+                            </div>
+                        </div>
                     </Nav>
                 )}
             </ContainerDimensions>

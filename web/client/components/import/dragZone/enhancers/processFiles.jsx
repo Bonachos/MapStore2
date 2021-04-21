@@ -90,7 +90,7 @@ const readFile = (onWarnings) => (file) => {
         return FileUtils.readJson(file).then(f => {
             const projection = get(f, 'map.projection');
             if (projection) {
-                if (supportedProjections.includes(projection)) {
+                if (projection === "EPSG:4326" || supportedProjections.map(proj => proj.code).includes(projection)) {
                     return [{...f, "fileName": file.name}];
                 }
                 throw new Error("PROJECTION_NOT_SUPPORTED");

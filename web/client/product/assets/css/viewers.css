@@ -1,0 +1,12 @@
+.viewers .mapstore-header {
+    background-image: url('../img/manager-header.jpg');
+    height: 100px;
+    z-index: -100;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    background-position: center;
+    position: relative;
+    top: -20px;
+}

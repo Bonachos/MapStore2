@@ -290,7 +290,18 @@ class OpenlayersMap extends React.Component {
                     newProps.center.x,
                     newProps.center.y
                 ], 'EPSG:4326', mapProjection);
-                this.map.setView(this.createView(center, newProps.zoom, newProps.projection, newProps.mapOptions && newProps.mapOptions.view, newProps.limits));
+                const maxExtent = this.props.maxExtent;
+                if (maxExtent) {
+                    let mapSize = {
+                        width: this.map.getSize()[0],
+                        height: this.map.getSize()[1]
+                    };
+                    let newZoom = mapUtils.getZoomForExtent(maxExtent, mapSize, 0, 21);
+                    let newCenter = mapUtils.getCenterForExtent(maxExtent, 'EPSG:4326');
+                    this.map.setView(this.createView(newCenter, newZoom, newProps.projection, newProps.mapOptions && newProps.mapOptions.view, newProps.limits));
+                } else {
+                    this.map.setView(this.createView(center, newProps.zoom, newProps.projection, newProps.mapOptions && newProps.mapOptions.view, newProps.limits));
+                }
                 this.props.onResolutionsChange(this.getResolutions());
             }
             // We have to force ol to drop tile and reload

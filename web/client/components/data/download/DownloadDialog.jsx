@@ -44,8 +44,10 @@ class DownloadDialog extends React.Component {
         formats: [],
         formatsLoading: false,
         srsList: [
-            {name: "native", label: "Native"},
-            {name: "EPSG:4326", label: "WGS84"}
+            {name: "EPSG:4326", label: "WGS84"},
+            {name: "EPSG:5013", label: "EPSG:5013"},
+            {name: "EPSG:5014", label: "EPSG:5014"},
+            {name: "EPSG:5015", label: "EPSG:5015"}
         ],
         virtualScroll: true,
         downloadOptions: {}

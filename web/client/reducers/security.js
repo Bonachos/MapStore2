@@ -87,7 +87,7 @@ function security(state = {user: null, errorCause: null}, action) {
     case SESSION_VALID:
     {
         return assign({}, state, {
-            user: action.userDetails.User,
+            user: action.userDetails ? action.userDetails.User : '',
             loginError: null
         });
     }

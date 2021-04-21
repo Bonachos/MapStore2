@@ -32,6 +32,11 @@ class Manager extends React.Component {
         reset: () => {}
     };
 
+    componentWillMount() {
+        delete this.props.plugins.NavMenuPlugin;
+        delete this.props.plugins.FooterPlugin;
+    }
+
     componentDidMount() {
         this.props.reset();
     }

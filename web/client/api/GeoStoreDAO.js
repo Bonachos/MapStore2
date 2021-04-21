@@ -119,6 +119,10 @@ const Api = {
             this.addBaseUrl(parseOptions(options))).then(function(response) { return response.data; });
     },
     getResourcesByCategory: function(category, query, options) {
+        if (category === "MAP") {
+            const url = process.env.REACT_APP_CONTEXTS_URL + 'maps';
+            return axios.get(url).then(function(response) {return response.data; });
+        }
         const q = query || "*";
         const url = "extjs/search/category/" + category + "/*" + q + "*/thumbnail,details,featured"; // comma-separated list of wanted attributes
         return axios.get(url, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
@@ -138,26 +142,49 @@ const Api = {
         });
     },
     login: function(username, password, options) {
-        const url = "session/login";
-        let authData;
-        return axios.post(url, null, this.addBaseUrl(merge((username && password) ? {
-            auth: {
-                username: username,
-                password: password
-            }
-        } : {}, options))).then((response) => {
-            authData = response.data;
-            return axios.get("users/user/details", this.addBaseUrl(merge({
+        const data = {
+            email: username,
+            password: password
+        };
+
+        return axios
+            .post(process.env.REACT_APP_CONTEXTS_URL + "login", data, {
                 headers: {
-                    'Authorization': 'Bearer ' + response.data.access_token
-                },
-                params: {
-                    includeattributes: true
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
                 }
-            }, options)));
-        }).then((response) => {
-            return { ...response.data, ...authData};
-        });
+            })
+            .then(response => {
+                console.log(response.data);
+
+                return {
+                    "access_token": response.data.token,
+                    "expires": 86400,
+                    "refresh_token": "ecc80e00-bbe1-408c-a99b-596bc4c418d0",
+                    "token_type": "bearer",
+                    "User": {
+                        "enabled": true,
+                        "groups": {
+                            "group": [
+                                {
+                                    "description": "description",
+                                    "enabled": true,
+                                    "groupName": "testGroup1",
+                                    "id": 2
+                                }, {
+                                    "enabled": true,
+                                    "groupName": "everyone",
+                                    "id": 1
+                                }
+                            ]
+                        },
+                        "id": 2,
+                        "name": username,
+                        "role": "ADMIN"
+                    }
+                };
+            })
+            .catch(error => console.log(error));
     },
     changePassword: function(user, newPassword, options) {
         return axios.put(
@@ -336,8 +363,23 @@ const Api = {
         });
     },
     getUsers: function(textSearch, options = {}) {
-        const url = "extjs/search/users" + (textSearch ? "/" + textSearch : "");
-        return axios.get(url, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
+        const loaded = localStorage.getItem("mapstore2.persist.security");
+        if (loaded) {
+            const token = JSON.parse(loaded).token;
+            return axios
+                .get(process.env.REACT_APP_CONTEXTS_URL + "user", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(error => console.log(error));
+        }
     },
     getUser: function(id, options = {params: {includeattributes: true}}) {
         const url = "users/user/" + id;
@@ -352,17 +394,41 @@ const Api = {
         return axios.put(url, {User: postUser}, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
     },
     createUser: function(user, options) {
-        const url = "users/";
-
-        return axios.post(url, {User: Api.utils.initUser(user)}, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
+        let groupId;
+        return axios
+            .put(process.env.REACT_APP_CONTEXTS_URL + "user", user, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+            }).then(() => groupId)
+            .catch(error => console.log(error));
     },
     deleteUser: function(id, options = {}) {
         const url = "users/user/" + id;
         return axios.delete(url, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
     },
     getGroups: function(textSearch, options = {}) {
-        const url = "extjs/search/groups" + (textSearch ? "/" + textSearch : "");
-        return axios.get(url, this.addBaseUrl(parseOptions(options))).then(function(response) {return response.data; });
+        const loaded = localStorage.getItem("mapstore2.persist.security");
+        if (loaded) {
+            const token = JSON.parse(loaded).token;
+            return axios
+                .get(process.env.REACT_APP_CONTEXTS_URL + "group", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache',
+                        'Authorization': 'Bearer ' + token
+                    }
+                })
+                .then(response => {
+                    console.log(response.data);
+                    return response.data;
+                })
+                .catch(error => console.log(error));
+        }
     },
     getGroup: function(id, options = {}) {
         const url = "usergroups/group/" + id;
@@ -373,13 +439,20 @@ const Api = {
         });
     },
     createGroup: function(group, options) {
-        const url = "usergroups/";
         let groupId;
-        return axios.post(url, {UserGroup: {...group}}, this.addBaseUrl(parseOptions(options)))
-            .then(function(response) {
-                groupId = response.data;
+        return axios
+            .put(process.env.REACT_APP_CONTEXTS_URL + "group", group, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                groupId = 0;
                 return Api.updateGroupMembers({...group, id: groupId}, options);
-            }).then(() => groupId);
+            }).then(() => groupId)
+            .catch(error => console.log(error));
     },
     updateGroupMembers: function(group, options) {
         // No GeoStore API to update group name and description. only update new users
@@ -423,21 +496,21 @@ const Api = {
         return axios.delete(url, this.addBaseUrl(parseOptions(options)));
     },
     verifySession: function(options) {
-        const url = "users/user/details";
-        return axios.get(url, this.addBaseUrl(merge({
-            params: {
-                includeattributes: true
-            }
-        }, options))).then(function(response) {
-            return response.data;
-        });
+        return axios
+            .get(process.env.REACT_APP_CONTEXTS_URL + "user?j=" + options.token, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+            .then(response => {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(error => console.log(error));
     },
     refreshToken: function(accessToken, refreshToken, options) {
-        // accessToken is actually the sessionID
-        const url = "session/refresh/" + accessToken + "/" + refreshToken;
-        return axios.post(url, null, this.addBaseUrl(parseOptions(options))).then(function(response) {
-            return response.data;
-        });
+        return this.verifySession({ token: accessToken });
     },
     /**
      * send a request to /extjs/search/list

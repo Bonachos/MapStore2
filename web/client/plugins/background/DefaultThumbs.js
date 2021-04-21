@@ -17,6 +17,13 @@ const unknown = require('./assets/img/dafault.jpg');
 const Night2012 = require('./assets/img/NASA_NIGHT.jpg');
 const AerialWithLabels = require('./assets/img/AerialWithLabels.jpg');
 const OpenTopoMap = require('./assets/img/OpenTopoMap.jpg');
+const DarkMatter = require('./assets/img/cartodb_darkmatter.jpg');
+const Positron = require('./assets/img/cartodb_positron.jpg');
+const BlackAndWhite = require('./assets/img/openstreetmap_blackandwhite.jpg');
+const DE = require('./assets/img/openstreetmap_de.jpg');
+const France = require('./assets/img/openstreetmap_france.jpg');
+const HOT = require('./assets/img/openstreetmap_hot.jpg');
+const Mapnik = require('./assets/img/openstreetmap_mapnik.jpg');
 
 // TODO REMOVE these once they are removed from all maps see issue #3304
 const HYBRID = require('./assets/img/HYBRID.jpg');
@@ -36,6 +43,13 @@ const thumbs = {
     osm: {
         mapnik
     },
+    OpenStreetMap: {
+        DE,
+        France,
+        HOT,
+        BlackAndWhite,
+        Mapnik
+    },
     mapquest: {
         osm: mapquestOsm
     },
@@ -51,6 +65,10 @@ const thumbs = {
     unknown,
     s2cloudless: {
         "s2cloudless:s2cloudless": s2cloodless
+    },
+    CartoDB: {
+        DarkMatter,
+        Positron
     }
 };
 

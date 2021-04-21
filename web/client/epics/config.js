@@ -29,8 +29,20 @@ export const loadMapConfigAndConfigureMap = (action$, store) =>
             // certain epics always function correctly
             // i.e. FeedbackMask disables correctly after load
             // TODO: investigate the root causes of the problem and come up with a better solution, if possible
-            (config ? Observable.of({data: config}).delay(100) : Observable.defer(() => axios.get(configName)))
+            (config ? Observable.of({data: config}).delay(100) : Observable.defer(() => axios.get(configName, {
+                headers: {
+                    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("mapstore2.persist.security")).token
+                }
+            })))
                 .switchMap(response => {
+                    if (response.data === "Not an Anonymous Viewer\n") {
+                        return Observable.of(configureError({messageId: 'O Visualizador não é de acesso Anónimo.'}, mapId));
+                    }
+
+                    if (response.data === "Inactive Viewer\n") {
+                        return Observable.of(configureError({messageId: 'O Visualizador encontra-se Inativo.'}, mapId));
+                    }
+
                     // added !config in order to avoid showing login modal when a new.json mapConfig is used in a public context
                     if (configName === "new.json" && !config && !isLoggedIn(store.getState())) {
                         return Observable.of(configureError({status: 403}));

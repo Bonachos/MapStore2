@@ -24,9 +24,9 @@ const ThemeUtils = require('../utils/ThemeUtils');
 const assign = require('object-assign');
 const {partialRight, merge} = require('lodash');
 
-const defaultConfig = require('../config.json');
+const defaultConfig = require('../contexts/config.json');
 
-const localConfig = require('../localConfig.json');
+const localConfig = require('../contexts/localConfig.json');
 
 const defaultPlugins = {
     "mobile": localConfig.plugins.embedded,

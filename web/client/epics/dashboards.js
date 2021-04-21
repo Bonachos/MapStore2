@@ -51,13 +51,7 @@ module.exports = {
                         .map(results => dashboardListLoaded(results, {searchText, options}))
                         .let(wrapStartStop(
                             dashboardsLoading(true, "loading"),
-                            dashboardsLoading(false, "loading"),
-                            () => Rx.Observable.of(error({
-                                title: "notification.error",
-                                message: "resources.dashboards.errorLoadingDashboards",
-                                autoDismiss: 6,
-                                position: "tc"
-                            }))
+                            dashboardsLoading(false, "loading")
                         ))
             ),
     deleteDashboard: action$ => action$

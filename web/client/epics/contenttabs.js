@@ -9,10 +9,6 @@
 const Rx = require('rxjs');
 const {findKey} = require('lodash');
 const {MAPS_LOAD_MAP, MAPS_LIST_LOADED} = require("../actions/maps");
-const {
-    DASHBOARDS_LIST_LOADED
-} = require('../actions/dashboards');
-const {GEOSTORIES_LIST_LOADED} = require('../actions/geostories');
 const {onTabSelected} = require("../actions/contenttabs");
 /**
 * Update Maps, Dashboards and Geostories counts to select contenttabs each tab has to have a key in its ContentTab configuration
@@ -21,9 +17,9 @@ const {onTabSelected} = require("../actions/contenttabs");
 const updateMapsDashboardTabs = (action$, {getState = () => {}}) =>
     action$.ofType(MAPS_LOAD_MAP)
         .switchMap(() => {
-            return Rx.Observable.forkJoin(action$.ofType(MAPS_LIST_LOADED).take(1), action$.ofType(DASHBOARDS_LIST_LOADED).take(1), action$.ofType(GEOSTORIES_LIST_LOADED).take(1))
+            return Rx.Observable.forkJoin(action$.ofType(MAPS_LIST_LOADED).take(1))
                 .switchMap((r) => {
-                    const results = {maps: r[0].maps, dashboards: r[1], geostories: r[2]};
+                    const results = {maps: r[0].maps};
                     const {contenttabs = {}} = getState() || {};
                     const {selected} = contenttabs;
                     if (results[selected] && results[selected].totalCount === 0) {

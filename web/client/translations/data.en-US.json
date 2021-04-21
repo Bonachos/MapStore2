@@ -181,7 +181,7 @@
         },
         "home":{
             "open": "Open",
-            "shortDescription": "Modern webmapping with OpenLayers, Leaflet and React<br/><small>visit the <a href=\"https://mapstore.readthedocs.io/en/latest/\">documentation</a> page</small>",
+            "shortDescription": " ",
             "forkMeOnGitHub": "Fork me on GitHub",
             "description": "MapStore has been developed to create, save and share in a simple and intuitive way maps and mashups created selecting contents coming from well-known sources like Google Maps and OpenStreetMap or from services provided by organizations using open protocols like OGC WMS, WFS, WMTS or TMS and so on.<br/>Visit the <a href=\"https://mapstore.readthedocs.io/en/latest/\">home page</a> for more details.",
             "Applications": "Applications",
@@ -297,7 +297,7 @@
                 "showDetails": "Show details"
             },
             "contents": {
-                "title": "Contents"
+                "title": " "
             },
             "dashboards": {
                 "newDashboard": "New Dashboard",
@@ -975,7 +975,8 @@
                 "notValidPolyline": "All coordinate must be valid (+|- 90° lat, +|-180° lon)",
                 "notValidText": "Insert a text value and a valid coordinate (+|- 90° lat, +|-180° lon)",
                 "notValidCircle": "Insert a radius value and a valid coordinate (+|- 90° lat, +|-180° lon)"
-            }
+            },
+            "report": "Report"
         },
         "user":{
             "login": "Login",

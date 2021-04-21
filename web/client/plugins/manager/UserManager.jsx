@@ -76,7 +76,6 @@ class UserManager extends React.Component {
                 limit={this.props.limit} />
             <Grid style={{marginBottom: "10px"}} fluid>
                 <h1 className="usermanager-title"><Message msgId={"users.users"}/></h1>
-                <Button style={{marginRight: "10px"}} bsStyle="success" onClick={this.onNew}>&nbsp;<span><Glyphicon glyph="1-user-add" /><Message msgId="users.newUser" /></span></Button>
             </Grid>
             <UserGrid />
             <UserDialog />

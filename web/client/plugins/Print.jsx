@@ -392,9 +392,13 @@ module.exports = {
                     };
 
                     print = () => {
-                        const spec = this.props.getPrintSpecification(this.props.printSpec);
+                        let spec = this.props.getPrintSpecification(this.props.printSpec);
+                        spec.mapHeader = this.props.map.mapHeader && this.props.map.mapHeader !== '' ? this.props.map.mapHeader : 'https://visualizador.idea.azores.gov.pt/product/assets/img/print_header.png';
+                        spec.mapNorth = this.props.map.mapNorth && this.props.map.mapNorth !== '' ? this.props.map.mapNorth : 'https://visualizador.idea.azores.gov.pt/product/assets/img/Arrow_North_CFCF.svg';
                         this.props.setPage(0);
                         this.props.onBeforePrint();
+                        this.props.capabilities.createURL = "https://visualizador.idea.azores.gov.pt/print/pdf/create.json";
+                        this.props.capabilities.printURL = "https://visualizador.idea.azores.gov.pt/print/pdf/print.pdf";
                         this.props.onPrint(this.props.capabilities.createURL, {...spec, ...this.props.overrideOptions});
                     };
                 }

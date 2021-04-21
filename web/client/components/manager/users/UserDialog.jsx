@@ -57,11 +57,14 @@ class UserDialog extends React.Component {
         buttonSize: "large",
         includeCloseButton: true,
         attributes: [{
-            name: "email"
+            name: "email",
+            label: "user.detailsEmail"
         }, {
-            name: "company"
+            name: "company",
+            label: "user.detailsCompany"
         }, {
-            name: "notes"
+            name: "notes",
+            label: "user.detailsNotes"
         }],
         inputStyle: {
             height: "32px",
@@ -140,33 +143,22 @@ class UserDialog extends React.Component {
                     key="name"
                     type="text"
                     name="name"
-                    readOnly={this.props.user && this.props.user.id}
+                    readOnly
                     style={this.props.inputStyle}
                     onChange={this.handleChange}
                     value={this.props.user && this.props.user.name || ""}/>
             </FormGroup>
-            {this.props.hidePasswordFields ? null : this.renderPasswordFields() }
             <select name="role" style={this.props.inputStyle} onChange={this.handleChange} value={this.props.user && this.props.user.role || ""}>
                 <option value="ADMIN">ADMIN</option>
                 <option value="USER">USER</option>
             </select>
-            <FormGroup>
-                <ControlLabel style={{"float": "left", marginRight: "10px"}}><Message msgId="users.enabled"/></ControlLabel>
-                <Checkbox
-                    defaultChecked={this.props.user && (this.props.user.enabled === undefined ? false : this.props.user.enabled)}
-                    type="checkbox"
-                    key={"enabled" + (this.props.user ? this.props.user.enabled : "missing")}
-                    name="enabled"
-                    onClick={(evt) => {this.props.onChange("enabled", evt.target.checked ? true : false); }} />
-            </FormGroup>
-            <div style={{ fontStyle: 'italic' }}><Message msgId="users.requiredFiedsMessage"/></div>
         </div>);
     };
 
     renderAttributes = () => {
         return this.props.attributes.map((attr, index) => {
             return (<FormGroup key={"form-n-" + index} style={{marginTop: "10px"}}>
-                <ControlLabel>{attr.name}</ControlLabel>
+                <ControlLabel><Message msgId={attr.label}/></ControlLabel>
                 <FormControl ref={"attribute." + attr.name}
                     key={"attribute." + attr.name}
                     name={"attribute." + attr.name}
@@ -232,12 +224,6 @@ class UserDialog extends React.Component {
                 <Tabs justified defaultActiveKey={1} onSelect={ ( key) => { this.setState({key}); }} key="tab-panel" id="userDetails-tabs">
                     <Tab eventKey={1} title={<Glyphicon glyph="user" style={{ display: 'block', padding: 8 }}/>} >
                         {this.renderGeneral()}
-                    </Tab>
-                    <Tab eventKey={2} title={<Glyphicon glyph="info-sign" style={{ display: 'block', padding: 8 }}/>} >
-                        {this.renderAttributes()}
-                    </Tab>
-                    <Tab eventKey={3} title={<Glyphicon glyph="1-group" style={{ display: 'block', padding: 8 }}/>} >
-                        {this.renderGroups()}
                     </Tab>
                 </Tabs>
             </div>

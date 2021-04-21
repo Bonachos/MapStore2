@@ -379,11 +379,7 @@ class Toolbar extends React.Component {
     }
 
     showMetadata = () => {
-        if (!this.props.layerMetadata.expanded) {
-            this.props.onToolsActions.onGetMetadataRecord();
-        } else {
-            this.props.onToolsActions.onHideLayerMetadata();
-        }
+        window.open("/geonetwork/srv/por/catalog.search#/metadata/" +  this.props.selectedLayers[0].catalogURL, "_blank");
     }
 
     removeNodes = () => {

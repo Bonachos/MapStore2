@@ -10,7 +10,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-bootstrap';
 import src from "./attribution/geosolutions-brand.png";
-import HTML from '../../components/I18N/HTML';
 
 /**
  * Footer plugin, section of the homepage.
@@ -26,6 +25,13 @@ import HTML from '../../components/I18N/HTML';
  * @class
  */
 
+const images = {
+    governo01: require('../assets/img/logos-governo-01.svg'),
+    governo02: require('../assets/img/logos-governo-02.svg'),
+    governo03: require('../assets/img/logos-governo-03.svg'),
+    governo04: require('../assets/img/logos-governo-04.svg')
+};
+
 class Footer extends React.Component {
 
     static propTypes = {
@@ -37,37 +43,42 @@ class Footer extends React.Component {
             src,
             width: 140,
             height: 'auto',
-            href: 'http://www.geo-solutions.it/',
-            title: 'GeoSolutions',
-            alt: 'GeoSolutions'
+            href: 'https://visualizador.idea.azores.gov.pt/',
+            title: 'IDEA',
+            alt: 'IDEA'
         }
     };
 
     render() {
-        const { href, ...logo } = this.props.logo || {};
-        const image = (
-            <img
-                src={logo.src}
-                width={logo.width || 'auto'}
-                height={logo.height || 'auto'}
-                title={logo.title || ''}
-                alt={logo.alt || ''} />
-        );
         return (
-            <Grid>
-                {logo && logo.src && <Row>
-                    <Col xs={12} className="text-center">
-                        <div>
-                            {href ? <a target="_blank" href={href}>
-                                {image}
-                            </a> : image}
-                        </div>
-                    </Col>
-                </Row>}
+            <Grid style={{position: "fixed", width: "100%", backgroundColor: "rgb(51, 102, 153)"}}>
                 <Row>
-                    <Col xs={12} className="text-center">
-                        <HTML msgId="home.footerDescription"/>
+                    <Col xs={4} />
+                    <Col xs={1} className="text-center">
+                        <img width={180} height={40} alt="180x40" src={images.governo01}/>
                     </Col>
+                    <Col xs={1} className="text-center">
+                        <img width={180} height={40} alt="180x40" src={images.governo02}/>
+                    </Col>
+                    <Col xs={1} className="text-center">
+                        <img width={180} height={40} alt="180x40" src={images.governo03}/>
+                    </Col>
+                    <Col xs={1} className="text-center">
+                        <img width={180} height={40} alt="180x40" src={images.governo04}/>
+                    </Col>
+                    <Col xs={4} />
+                </Row>
+                <hl/>
+                <Row>
+                    <Col xs={4} />
+                    <Col xs={4}>
+                        <Row>
+                            <Col xs={4} className="text-center"><div className="footer-creds" style={{ color: "white", fontWeight: "bold" }}>© 2020 Direção Regional do Ambiente</div></Col>
+                            <Col xs={4} className="text-center"><a className="footer-link" style={{ color: "white", fontWeight: "bold" }} href="https://idea.azores.gov.pt/termos-condicoes" target="_blank">Termos e Condições de Uso</a></Col>
+                            <Col xs={4} className="text-center"><a className="footer-link" style={{ color: "white", fontWeight: "bold" }} href="https://idea.azores.gov.pt/politica-privacidade" target="_blank">Política de Privacidade</a></Col>
+                        </Row>
+                    </Col>
+                    <Col xs={4} />
                 </Row>
             </Grid>
         );

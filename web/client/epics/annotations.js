@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+const axios = require('../libs/ajax');
 const Rx = require('rxjs');
 const {saveAs} = require('file-saver');
 const {MAP_CONFIG_LOADED} = require('../actions/config');
@@ -23,7 +24,7 @@ const {updateAnnotationGeometry, setStyle, toggleStyle, cleanHighlight, toggleAd
     showAnnotation, editAnnotation,
     CONFIRM_REMOVE_ANNOTATION, SAVE_ANNOTATION, EDIT_ANNOTATION, CANCEL_EDIT_ANNOTATION,
     SET_STYLE, RESTORE_STYLE, HIGHLIGHT, CLEAN_HIGHLIGHT, CONFIRM_CLOSE_ANNOTATIONS, START_DRAWING,
-    CANCEL_CLOSE_TEXT, SAVE_TEXT, DOWNLOAD, LOAD_ANNOTATIONS, CHANGED_SELECTED, RESET_COORD_EDITOR, CHANGE_RADIUS,
+    CANCEL_CLOSE_TEXT, SAVE_TEXT, REPORT, DOWNLOAD, LOAD_ANNOTATIONS, CHANGED_SELECTED, RESET_COORD_EDITOR, CHANGE_RADIUS,
     ADD_NEW_FEATURE, SET_EDITING_FEATURE, CHANGE_TEXT, NEW_ANNOTATION, TOGGLE_STYLE, CONFIRM_DELETE_FEATURE, OPEN_EDITOR
 } = require('../actions/annotations');
 
@@ -464,6 +465,35 @@ module.exports = (viewer) => ({
                 store.getState().controls.annotations && store.getState().controls.annotations.enabled ?
                     [toggleControl('annotations')] : [])
                 .concat([purgeMapInfoResults()]));
+        }),
+    reportAnnotations: (action$, {getState}) => action$.ofType(REPORT)
+        .switchMap(({annotation}) => {
+            try {
+                const annotations = annotation && [annotation] || (annotationsLayerSelector(getState())).features;
+                const mapName = getState().map.present.mapId;
+                const emailAddress = getState().mapConfigRawData.emailAddress;
+                const data = {features: annotations, mapName: mapName, emailAddress: emailAddress };
+                const url = process.env.REACT_APP_CONTEXTS_URL + 'annotation';
+                return axios
+                    .post(url, data, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Cache-Control': 'no-cache'
+                        }
+                    })
+                    .then(response => {
+                        console.log(response);
+                        return Rx.Observable.empty();
+                    })
+                    .catch(axioserror => console.log(axioserror));
+            } catch (e) {
+                return Rx.Observable.of(error({
+                    title: "annotations.title",
+                    message: "annotations.downloadError",
+                    autoDismiss: 5,
+                    position: "tr"
+                }));
+            }
         }),
     downloadAnnotations: (action$, {getState}) => action$.ofType(DOWNLOAD)
         .switchMap(({annotation}) => {

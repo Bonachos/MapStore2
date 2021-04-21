@@ -32,14 +32,14 @@ const refreshTokenEpic = (action$, store) =>
         .take(1)
         // do not launch the session verify is there is no stored session
         .switchMap(() => (get(store.getState(), "security.user") ?
-            Rx.Observable.fromPromise(AuthenticationAPI.verifySession())
+            Rx.Observable.fromPromise(AuthenticationAPI.verifySession(get(store.getState(), "security")))
                 .map(
                     (response) => sessionValid(response, AuthenticationAPI.authProviderName)
                 )
                 .catch(() => Rx.Observable.of(logout(null))) : Rx.Observable.empty()
         )
             .merge(Rx.Observable
-                .interval(300000 /* ms */)
+                .interval(14400000)
                 .filter(() => get(store.getState(), "security.user"))
                 .mapTo(refreshAccessToken()))
         );

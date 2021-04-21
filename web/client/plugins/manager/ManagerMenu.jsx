@@ -52,29 +52,14 @@ class ManagerMenu extends React.Component {
     static defaultProps = {
         id: "mapstore-burger-menu",
         entries: [{
-            "msgId": "users.title",
-            "glyph": "1-group-mod",
-            "path": "/manager/usermanager"
-        },
-        {
-            "msgId": "contextManager.title",
+            "msgId": "admin.admin",
             "glyph": "wrench",
-            "path": "/context-manager"
-        },
-        {
-            "msgId": "rulesmanager.menutitle",
-            "glyph": "admin-geofence",
-            "path": "/rules-manager"
-        },
-        {
-            "msgId": "importer.title",
-            "glyph": "upload",
-            "path": "/importer"
+            "path": "/admin"
         }],
         role: "",
         onItemClick: () => {},
         itemSelected: () => {},
-        title: <MenuItem header>Manager</MenuItem>,
+        title: <MenuItem header>Gestão</MenuItem>,
         controls: [],
         mapType: "leaflet",
         panelStyle: {

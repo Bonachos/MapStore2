@@ -91,7 +91,7 @@ class Maps extends React.Component {
         loadMaps: () => {},
         setShowMapDetails: () => {},
         fluid: false,
-        title: <h3><Message msgId="manager.maps_title" /></h3>,
+        title: "",
         mapsOptions: {start: 0, limit: 12},
         colProps: {
             xs: 12,
@@ -109,7 +109,7 @@ class Maps extends React.Component {
             fluid={this.props.fluid}
             title={this.props.title}
             colProps={this.props.colProps}
-            viewerUrl={(map) => {this.context.router.history.push("/viewer/" + this.props.mapType + "/" + map.id);}}
+            viewerUrl={(map) => {window.open("/#/gra/" + map.entity + "/" + map.folder, '_blank');}}
             getShareUrl={(map) => `viewer/${this.props.mapType}/${map.id}`}
             shareApi
             bottom={<PaginationToolbar />}
@@ -150,9 +150,9 @@ module.exports = {
     MapsPlugin: assign(MapsPlugin, {
         NavMenu: {
             position: 2,
-            label: <Message msgId="manager.maps_title" />,
+            label: '',
             linkId: '#mapstore-maps-grid',
-            glyph: '1-map'
+            glyph: ''
         },
         ContentTabs: {
             name: 'maps',

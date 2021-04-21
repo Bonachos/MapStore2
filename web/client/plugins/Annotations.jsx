@@ -20,7 +20,7 @@ const {cancelRemoveAnnotation, confirmRemoveAnnotation, editAnnotation, newAnnot
     saveAnnotation, toggleAdd, validationError, removeAnnotationGeometry, toggleStyle, setStyle, restoreStyle,
     highlight, cleanHighlight, showAnnotation, cancelShowAnnotation, filterAnnotations, closeAnnotations,
     cancelCloseAnnotations, confirmCloseAnnotations, startDrawing, setUnsavedChanges, toggleUnsavedChangesModal,
-    changedProperties, setUnsavedStyle, toggleUnsavedStyleModal, addText, download, loadAnnotations,
+    changedProperties, setUnsavedStyle, toggleUnsavedStyleModal, addText, report, download, loadAnnotations,
     changeSelected, resetCoordEditor, changeRadius, changeText, toggleUnsavedGeometryModal, addNewFeature, setInvalidSelected,
     highlightPoint, confirmDeleteFeature, toggleDeleteFtModal, changeFormat, openEditor, updateSymbols, changePointType,
     setErrorSymbol
@@ -70,6 +70,7 @@ const commonEditorActions = {
     onCancelClose: cancelCloseAnnotations,
     onConfirmClose: confirmCloseAnnotations,
     onConfirmRemove: confirmRemoveAnnotation,
+    onReport: report,
     onDownload: download
 };
 const AnnotationsEditor = connect(annotationsInfoSelector,
@@ -104,6 +105,7 @@ const Annotations = connect(panelSelector, {
     onCleanHighlight: cleanHighlight,
     onDetail: showAnnotation,
     onFilter: filterAnnotations,
+    onReport: report,
     onDownload: download,
     onLoadAnnotations: loadAnnotations
 })(require('../components/mapcontrols/annotations/Annotations'));

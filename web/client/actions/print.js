@@ -63,7 +63,7 @@ function printSubmit(url, spec) {
     return (dispatch) => {
         return axios.post(url, spec).then((response) => {
             if (typeof response.data === 'object') {
-                dispatch(printCreated(response.data && response.data.getURL));
+                dispatch(printCreated(response.data && response.data.getURL.replace("http://", "https://").replace("/mapstore", "").replace("/pdf", "/print/pdf")));
             } else {
                 try {
                     JSON.parse(response.data);

@@ -13,17 +13,34 @@ const {LOCAL_CONFIG_LOADED} = require('../actions/localConfig');
 const Rx = require('rxjs');
 const {get} = require('lodash');
 
-const defaultRegexes = [/\/viewer\/\w+\/(\w+)/, /\/viewer\/(\w+)/];
+const defaultRegexes = [/\/visualizador\/\w+\/(\w+)/, /\/visualizador\/(\w+)/];
+const defaultRegexes2 = [/\/gra\/\w+\/\w+\/(\w+)/];
 const { push } = require('connected-react-router');
 
 const replaceMapType = (path, newMapType) => {
+    let pathToMatch = path;
+    if (pathToMatch.indexOf("cesium") === -1 && pathToMatch.indexOf("openlayers") === -1) {
+        pathToMatch += "/openlayers";
+    }
+
     const match = defaultRegexes.reduce((previous, regex) => {
-        return previous || path.match(regex);
+        return previous || pathToMatch.match(regex);
     }, null);
     if (match) {
-        return `/viewer/${newMapType}/${match[1]}`;
+        return `${match[0]}`.replace(`${match[1]}`, `${newMapType}`);
     }
-    return path;
+
+    const match2 = defaultRegexes2.reduce((previous, regex) => {
+        return previous || pathToMatch.match(regex);
+    }, null);
+    if (match2) {
+        return `${match2[0]}`.replace(`${match2[1]}`, `${newMapType}`);
+    }
+
+    if (pathToMatch === "#/") {
+        return `/viewer/cesium/config`;
+    }
+    return pathToMatch;
 };
 /**
  * Gets every `TOGGLE_3D` event.

@@ -32,7 +32,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
  */
 module.exports = (bundles, themeEntries, paths, extractThemesPlugin, prod, publicPath, cssPrefix, prodPlugins, alias = {}, proxy) => ({
     entry: assign({
-        'webpack-dev-server': 'webpack-dev-server/client?http://0.0.0.0:8081', // WebpackDevServer host and port
+        'webpack-dev-server': 'webpack-dev-server/client?http://0.0.0.0:8082', // WebpackDevServer host and port
         'webpack': 'webpack/hot/only-dev-server' // "only" prevents reload on syntax errors
     }, bundles, themeEntries),
     mode: prod ? "production" : "development",
@@ -63,7 +63,9 @@ module.exports = (bundles, themeEntries, paths, extractThemesPlugin, prod, publi
         }),
         new DefinePlugin({
             'process.env': {
-                'NODE_ENV': prod ? '"production"' : '""'
+                'NODE_ENV': prod ? '"production"' : '""',
+                'REACT_APP_BO_URL': prod ? '""' : '"http://localhost:8888"',
+                'REACT_APP_CONTEXTS_URL': prod ? '"/contexts/"' : '"http://localhost:1333/"'
             }
         }),
         new NormalModuleReplacementPlugin(/leaflet$/, path.join(paths.framework, "libs", "leaflet")),
@@ -174,38 +176,26 @@ module.exports = (bundles, themeEntries, paths, extractThemesPlugin, prod, publi
         }] : [])
     },
     devServer: {
-        proxy: proxy || {
-            '/rest/geostore': {
-                target: "https://dev.mapstore.geo-solutions.it/mapstore",
-                secure: false,
-                headers: {
-                    host: "dev.mapstore.geo-solutions.it"
+        proxy: {
+            '/rest/': {
+                target: "http://localhost:8080"
+                // ,
+                // pathRewrite: {
+                //     '/rest/geostore': '/geostore/rest'
+                // }
+            },
+            '/proxy': {
+                target: "http://localhost:8080",
+                secure: false
+            },
+            '/docs': {
+                pathRewrite: {
+                    '/docs': '/mapstore/docs'
                 }
             },
             '/pdf': {
-                target: "https://dev.mapstore.geo-solutions.it/mapstore",
-                secure: false,
-                headers: {
-                    host: "dev.mapstore.geo-solutions.it"
-                }
-            },
-            '/mapstore/pdf': {
-                target: "https://dev.mapstore.geo-solutions.it",
-                secure: false,
-                headers: {
-                    host: "dev.mapstore.geo-solutions.it"
-                }
-            },
-            '/proxy': {
-                target: "https://dev.mapstore.geo-solutions.it/mapstore",
-                secure: false,
-                headers: {
-                    host: "dev.mapstore.geo-solutions.it"
-                }
-            },
-            '/docs': {
-                target: "http://localhost:8081",
-                pathRewrite: {'/docs': '/mapstore/docs'}
+                target: "/mapstore",
+                secure: true
             }
         }
     },

@@ -11,6 +11,13 @@
  */
 module.exports = {
     plugins: {
+        // new plugins
+        AdminArchivePlugin: require('../plugins/AdminArchive'),
+        ViewersPlugin: require('../plugins/Viewers'),
+        GeoserversPlugin: require('../plugins/Geoservers'),
+        GeoDataPlugin: require('../plugins/GeoData'),
+        EntitiesPlugin: require('../plugins/Entities'),
+        ViewerLayersPlugin: require('../plugins/ViewerLayers'),
         // product plugins
         AboutPlugin: require('./plugins/About'),
         AttributionPlugin: require('./plugins/Attribution'),

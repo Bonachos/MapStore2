@@ -51,19 +51,7 @@ class CreateNewMap extends React.Component {
         return (<Grid fluid={this.props.fluid} style={{marginBottom: "30px", padding: 0, display}}>
             <Col {...this.props.colProps} >
                 <ButtonToolbar>
-                    <Button tooltipId="newMap" className="square-button" bsStyle="primary" onClick={() => { this.context.router.history.push("/viewer/" + this.props.mapType + "/new"); }}>
-                        <Glyphicon glyph="add-map" />
-                    </Button>
-                    {this.props.showNewDashboard ?
-                        <Button tooltipId="resources.dashboards.newDashboard" className="square-button" bsStyle="primary" onClick={() => { this.context.router.history.push("/dashboard/"); }}>
-                            <Glyphicon glyph="add-dashboard" />
-                        </Button>
-                        : null}
-                    {this.props.showNewGeostory ?
-                        <Button tooltipId="resources.geostories.newGeostory" className="square-button" bsStyle="primary" onClick={() => { this.context.router.history.push("/geostory/newgeostory/"); }}>
-                            <Glyphicon glyph="add-geostory" />
-                        </Button>
-                        : null}
+                    <div></div>
                 </ButtonToolbar>
             </Col>
         </Grid>);

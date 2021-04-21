@@ -79,10 +79,6 @@ class GroupsGrid extends React.Component {
                 onClick: () => {this.props.onEdit(group); },
                 glyph: "wrench",
                 tooltip: LocaleUtils.getMessageById(this.context.messages, "usergroups.editGroup")
-            }, {
-                onClick: () => {this.props.onDelete(group && group.id); },
-                glyph: "remove-circle",
-                tooltip: LocaleUtils.getMessageById(this.context.messages, "usergroups.deleteGroup")
             }];
             if ( group && group.groupName === "everyone") {
                 actions = [];

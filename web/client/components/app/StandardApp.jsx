@@ -28,6 +28,7 @@ const {isObject, isArray} = require('lodash');
 const urlQuery = url.parse(window.location.href, true).query;
 
 require('./appPolyfill');
+const axios = require('axios');
 
 const ErrorBoundary = require('react-error-boundary').default;
 
@@ -121,12 +122,37 @@ class StandardApp extends React.Component {
         const {plugins, requires} = this.props.pluginsDef;
         const {pluginsDef, appStore, initialActions, appComponent, mode, ...other} = this.props;
         const App = dragDropContext(html5Backend)(this.props.appComponent);
+
+        function ErrorFallback({ error }) {
+            axios
+            .post(process.env.REACT_APP_BO_URL + "/bo/viewer", { "viewer": itemToAdd }, {
+                headers: {
+                    'Authorization': `Bearer ` + this.props.auth.token
+                }
+            })
+            .then({
+            })
+            .catch(error => {
+                console.log(error);
+                this.setError('Erro ao adicionar Visualizador', 'Erro ao adicionar Visualizador');
+            });
+
+            return (
+                <div role="alert">
+                    <p>Ocorreu um erro:</p>
+                    <pre>{error.message}</pre>
+                    <button onClick={() => window.open('/', '_self')}>Retornar</button>
+                </div>
+            );
+        }
+
         return this.state.initialized ?
-            <ErrorBoundary><Provider store={this.store}>
-                <App {...other} plugins={assign(PluginsUtils.getPlugins(plugins), { requires })} />
-            </Provider></ErrorBoundary>
+            <ErrorBoundary FallbackComponent={ErrorFallback}
+            ><Provider store={this.store}>
+                    <App {...other} plugins={assign(PluginsUtils.getPlugins(plugins), { requires })} />
+                </Provider></ErrorBoundary>
             : (<span><div className="_ms2_init_spinner _ms2_init_center"><div></div></div>
-                <div className="_ms2_init_text _ms2_init_center">Loading MapStore</div></span>);
+                <div className="_ms2_init_text _ms2_init_center">A Carregar Mapa</div></span>);
     }
     afterInit = () => {
         if (this.props.printingEnabled) {

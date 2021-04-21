@@ -38,6 +38,7 @@ const CHANGED_PROPERTIES = 'ANNOTATIONS:CHANGED_PROPERTIES';
 const UNSAVED_STYLE = 'ANNOTATIONS:UNSAVED_STYLE';
 const TOGGLE_STYLE_MODAL = 'ANNOTATIONS:TOGGLE_STYLE_MODAL';
 const ADD_TEXT = 'ANNOTATIONS:ADD_TEXT';
+const REPORT = 'ANNOTATIONS:REPORT';
 const DOWNLOAD = 'ANNOTATIONS:DOWNLOAD';
 const LOAD_ANNOTATIONS = 'ANNOTATIONS:LOAD_ANNOTATIONS';
 const CHANGED_SELECTED = 'ANNOTATIONS:CHANGED_SELECTED';
@@ -95,6 +96,13 @@ function highlightPoint(point) {
     return {
         type: HIGHLIGHT_POINT,
         point
+    };
+}
+
+function report(annotation) {
+    return {
+        type: REPORT,
+        annotation
     };
 }
 
@@ -391,6 +399,7 @@ module.exports = {
     closeAnnotations,
     confirmCloseAnnotations,
     cancelCloseAnnotations,
+    REPORT, report,
     DOWNLOAD, download,
     OPEN_EDITOR, openEditor,
     CONFIRM_DELETE_FEATURE, confirmDeleteFeature,

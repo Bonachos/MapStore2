@@ -36,9 +36,9 @@ module.exports = {
         NavMenu: {
             tool: (props) => ({
                 position: 0,
-                label: props.label || 'GeoSolutions',
-                href: props.href || 'https://www.geo-solutions.it/',
-                img: props.src && <img className="customer-logo" src={props.src} height="30" /> || <img className="customer-logo" src={src} height="30" />,
+                label: props.label || 'IDEA',
+                href: props.href || 'https://visualizador.idea.azores.gov.pt/',
+                img: props.src && <img className="customer-logo" src={props.src} height="50" /> || <img className="customer-logo" src={src} height="50" />,
                 logo: true
             })
         }

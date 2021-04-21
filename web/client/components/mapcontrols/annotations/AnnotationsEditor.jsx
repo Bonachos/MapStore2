@@ -90,6 +90,7 @@ const bbox = require('@turf/bbox');
  * @prop {function} onHighlightPoint triggered when mouse goes over/off a CoordinatesRow
  * @prop {function} onResetCoordEditor triggered when the user goes back from the coordinate editor, it will open a dialog for unsaved changes
  * @prop {function} onZoom triggered when the user zooms to an annotation
+ * @prop {function} onReport triggered when the user reports an annotation
  * @prop {function} onDownload triggered when the user exports
  * @prop {boolean} coordinateEditorEnabled triggered when the user zooms to an annotation
  * @prop {object} selected Feature containing the geometry and the properties used for the coordinated editor
@@ -176,6 +177,7 @@ class AnnotationsEditor extends React.Component {
         mode: PropTypes.string,
         maxZoom: PropTypes.number,
         width: PropTypes.number,
+        onReport: PropTypes.func,
         onDownload: PropTypes.func,
         onChangeFormat: PropTypes.func,
         mapProjection: PropTypes.string,
@@ -267,6 +269,12 @@ class AnnotationsEditor extends React.Component {
                                 onClick: () => { this.props.onEdit(this.props.id); },
                                 disabled: !this.props.config.multiGeometry && this.props.editing && this.props.editing.features && this.props.editing.features.length,
                                 bsStyle: this.props.drawing ? "success" : "primary"
+                            },
+                            {
+                                glyph: 'envelope',
+                                tooltip: <Message msgId="annotations.report"/>,
+                                visible: this.props.showEdit,
+                                onClick: () => { this.props.onReport(this.props.feature); }
                             }, {
                                 glyph: 'trash',
                                 tooltipId: "annotations.remove",

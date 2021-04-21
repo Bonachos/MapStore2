@@ -182,7 +182,7 @@ const PrintUtils = {
      * @return {array}         the configuration array for layers (or legend) to send to the print service.
      */
     getMapfishLayersSpecification: (layers, spec, purpose) => {
-        return layers.filter((layer) => PrintUtils.specCreators[layer.type] && PrintUtils.specCreators[layer.type][purpose])
+        return layers.filter((layer) => PrintUtils.specCreators[layer.type] && PrintUtils.specCreators[layer.type][purpose] && !(layer.type === "vector" && !layer.features))
             .map((layer) => PrintUtils.specCreators[layer.type][purpose](layer, spec));
     },
     specCreators: {
@@ -201,7 +201,7 @@ const PrintUtils = {
                 ],
                 "customParams": SecurityUtils.addAuthenticationParameter(PrintUtils.normalizeUrl(layer.url), assign({
                     "TRANSPARENT": true,
-                    "TILED": true,
+                    "TILED": false,
                     "EXCEPTIONS": "application/vnd.ogc.se_inimage",
                     "scaleMethod": "accurate"
                 }, layer.baseParams || {}, layer.params || {}, {

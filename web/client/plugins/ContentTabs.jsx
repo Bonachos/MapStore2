@@ -103,12 +103,7 @@ module.exports = {
     ContentTabsPlugin: assign(connect(selectedSelector, {
         onSelect: onTabSelected
     })(ContentTabs), {
-        NavMenu: {
-            position: 2,
-            label: <Message msgId="resources.contents.title" />,
-            linkId: '#content-tabs',
-            glyph: 'dashboard'
-        }
+        NavMenu: {}
     }),
     reducers: {contenttabs: require('../reducers/contenttabs')},
     epics: require('../epics/contenttabs')

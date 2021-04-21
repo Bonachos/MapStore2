@@ -10,6 +10,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 const ConfigUtils = require('../../../utils/ConfigUtils');
 require('../../assets/css/viewer.css');
+const axios = require('axios');
 let oldLocation;
 
 class MapViewerComponent extends React.Component {
@@ -26,15 +27,23 @@ class MapViewerComponent extends React.Component {
     static defaultProps = {
         mode: 'desktop',
         plugins: {},
-        onInit: () => {},
-        loadMapConfig: () => {},
+        onInit: () => { },
+        loadMapConfig: () => { },
         match: {
             params: {}
         }
     };
     UNSAFE_componentWillMount() {
         const id = this.props.match.params.mapId || '0';
-        this.updateMap(id);
+        const entityId = this.props.match.params.entityId || '0';
+        const mapName = this.props.match.params.mapName || '0';
+        if (id !== '0') {
+            this.updateMap(id);
+        } else if (entityId !== '0' && mapName !== '0') {
+            this.updateMap(entityId + '_-_' + mapName);
+        } else {
+            this.updateMap('0');
+        }
     }
     componentDidUpdate(oldProps) {
         const id = this.props.match.params.mapId || '0';
@@ -70,7 +79,19 @@ class MapViewerComponent extends React.Component {
             const { configUrl } = ConfigUtils.getConfigUrl({ mapId, config });
             mapId = mapId === 'new' ? null : mapId;
             this.props.onInit();
-            this.props.loadMapConfig(configUrl, mapId);
+
+            const mapType = this.props.location.pathname.includes("/cesium") ? "cesium" : "ol";
+            if (!isNaN(mapId) || mapId.includes("_-_")) {
+                axios
+                    .get(process.env.REACT_APP_BO_URL + "/bo/viewer/" + mapId)
+                    .then(response => {
+                        const entity = response.data.entity;
+                        const folder = response.data.folder;
+                        this.props.loadMapConfig(process.env.REACT_APP_CONTEXTS_URL + "context?e=" + entity + "&c=" + folder + ".json" + "&t=" + mapType, folder);
+                    });
+            } else {
+                this.props.loadMapConfig(process.env.REACT_APP_CONTEXTS_URL + "context?c=" + configUrl + "&t=" + mapType, mapId);
+            }
         }
     }
 }

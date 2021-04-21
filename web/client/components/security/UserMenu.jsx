@@ -80,7 +80,7 @@ class UserMenu extends React.Component {
             useModal: false,
             closeGlyph: "1-close"
         }],
-        renderUnsavedMapChangesDialog: true
+        renderUnsavedMapChangesDialog: false
     };
 
     checkUnsavedChanges = () => {

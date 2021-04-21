@@ -80,7 +80,8 @@ class GroupDialog extends React.Component {
     state = {
         key: 1,
         openSelectMember: false,
-        selectedMember: ''
+        selectedMember: '',
+        username: ""
     };
 
     componentDidMount() {
@@ -144,7 +145,10 @@ class GroupDialog extends React.Component {
         return [
             <Button key="save" bsSize={this.props.buttonSize} bsSize="small"
                 bsStyle={this.isSaved() ? "success" : "primary" }
-                onClick={() => this.props.onSave(this.props.group)}
+                onClick={() => {
+                    this.props.onSave(this.props.group);
+                    this.props.onClose();
+                }}
                 disabled={!this.isValid() || this.isSaving()}>
                 {this.renderSaveButtonContent()}</Button>,
             CloseBtn
@@ -170,8 +174,8 @@ class GroupDialog extends React.Component {
         }
         // NOTE: faking group Id
         return (<UsersTable users={[...members].sort((u1, u2) => u1.name > u2.name)} onRemove={(user) => {
-            let id = user.id;
-            let newUsers = this.getCurrentGroupMembers().filter(u => u.id !== id);
+            let name = user.name;
+            let newUsers = this.getCurrentGroupMembers().filter(u => u.name !== name);
             this.props.onChange("newUsers", newUsers);
         }}/>);
     };
@@ -198,18 +202,21 @@ class GroupDialog extends React.Component {
                 }} >{this.renderMembers()}</div>
             <div key="add-member" style={{ marginTop: "10px" }}>
                 <label key="add-member-label" className="control-label"><Message msgId="usergroups.addMember" /></label>
-                <PagedCombobox
-                    busy={this.props.availableUsersLoading}
-                    data={availableUsers}
-                    open={this.state.openSelectMember}
-                    onToggle={this.handleToggleSelectMember}
-                    onChange={this.handleSelectMemberOnChange}
-                    placeholder={placeholder}
-                    pagination={pagination}
-                    selectedValue={this.state.selectedMember}
-                    onSelect={this.handleSelect}
-                    stopPropagation
-                />
+                <span>
+                    <FormControl ref="username"
+                        key="username"
+                        type="text"
+                        name="username"
+                        readOnly={false}
+                        style={this.props.inputStyle}
+                        onChange={this.handleUsernameChange}
+                        value={this.state.username || ""}/>
+                    <Button bsSize="xs" onClick={() => {
+                        this.addUser();
+                    }}>
+                        <Message msgId="usergroups.addUser" />
+                    </Button>
+                </span>
             </div>
         </div>);
     };
@@ -230,22 +237,19 @@ class GroupDialog extends React.Component {
                 <span className="user-panel-title">{(this.props.group && this.props.group.groupName) || <Message msgId="usergroups.newGroup" />}</span>
             </span>
             <div role="body">
-                <Tabs justified defaultActiveKey={1} onSelect={ ( key) => { this.setState({key}); }} key="tab-panel">
-                    <Tab eventKey={1} title={<Glyphicon glyph="1-group" style={{ display: 'block', padding: 8 }} />} >
-                        {this.renderGeneral()}
-                        {this.checkNameLenght()}
-                        {this.checkDescLenght()}
-                    </Tab>
-                    <Tab eventKey={2} title={<Glyphicon glyph="1-group-add" style={{ display: 'block', padding: 8 }} />} >
-                        {this.renderMembersTab()}
-                    </Tab>
-                </Tabs>
+                {this.renderMembersTab()}
             </div>
             <div role="footer">
                 {this.renderError()}
                 {this.renderButtons()}
             </div>
         </Dialog>);
+    }
+
+    addUser() {
+        let newUsers = this.getCurrentGroupMembers();
+        newUsers = [...newUsers, { name: this.state.username }];
+        this.props.onChange("newUsers", newUsers);
     }
 
     // check if pagination last page
@@ -345,6 +349,12 @@ class GroupDialog extends React.Component {
 
     handleChange = (event) => {
         this.props.onChange(event.target.name, event.target.value);
+    };
+
+    handleUsernameChange = (event) => {
+        this.setState({
+            username: event.target.value
+        });
     };
 }
 

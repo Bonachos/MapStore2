@@ -51,13 +51,7 @@ module.exports = {
                         .map(results => geostoriesListLoaded(results, {searchText, options}))
                         .let(wrapStartStop(
                             geostoriesLoading(true, "loading"),
-                            geostoriesLoading(false, "loading"),
-                            () => Rx.Observable.of(error({
-                                title: "notification.error",
-                                message: "resources.geostories.errorLoadingGeostories",
-                                autoDismiss: 6,
-                                position: "tc"
-                            }))
+                            geostoriesLoading(false, "loading")
                         ))
             ),
     deleteGeostory: action$ => action$

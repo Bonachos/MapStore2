@@ -25,11 +25,17 @@ const urlQuery = url.parse(window.location.href, true).query;
 
 const isMobile = require('ismobilejs');
 
-let localConfigFile = 'localConfig.json';
+let localConfigFile = process.env.REACT_APP_CONTEXTS_URL + 'context?c=localConfig.json';
 
 let defaultConfig = {
     // TODO: these should be changed tp relative paths, without /mapstore/ or / (to avoid the needing of overriding in default cases)
-    proxyUrl: "/mapstore/proxy/?url=",
+    proxyUrl: {
+        "url": "proxy/?url=",
+        "useCORS": [
+            "http://localhost:8888",
+            "http://localhost:1333"
+        ]
+    },
     geoStoreUrl: "/rest/geostore/",
     printUrl: "/mapstore/print/info.json",
     translationsPath: "translations",

@@ -76,9 +76,6 @@ class GroupManager extends React.Component {
                 limit={this.props.limit} />
             <Grid style={{marginBottom: "10px"}} fluid>
                 <h1 className="usermanager-title"><Message msgId={"usergroups.groups"}/></h1>
-                <Button style={{marginRight: "10px"}} bsStyle="success" onClick={this.onNew}>
-                    <span><Glyphicon glyph="1-group-add" />&nbsp;<Message msgId="usergroups.newGroup" /></span>
-                </Button>
             </Grid>
             <GroupsGrid />
             <GroupDialog />

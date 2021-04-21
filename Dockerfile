@@ -1,9 +1,9 @@
-FROM tomcat:7.0.92-jre7-alpine
+FROM tomcat:7.0.94-jre7-alpine
 MAINTAINER geosolutions<info@geo-solutions.it>
 
 # Install utilities
 RUN  apk update \
-     && apk add vim \
+     && apk add vim ttf-dejavu fontconfig \
      && rm -rf /var/cache/apk/*
 
 # Tomcat specific options
@@ -28,3 +28,5 @@ ENV JAVA_OPTS="${JAVA_OPTS} ${GEOSTORE_OVR_OPT}"
 ENV TERM xterm
 
 EXPOSE 8080
+
+ADD docker/server.xml /usr/local/tomcat/conf/server.xml
